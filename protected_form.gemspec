@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alexandr Subbotin"]
   spec.email         = ["kelionweb@gmail.com"]
   spec.summary       = %q{Spam protection for rails forms}
-  spec.description   = %q{Simple wrapper for `form_for` with javascript form submission with changing html structure of form.}
+  spec.description   = %q{Simple anti-spam wrapper for `form_for` with javascript form submission with changing html structure of form.}
   spec.homepage      = "http://github.com/KELiON/protected_form"
   spec.license       = "MIT"
 
