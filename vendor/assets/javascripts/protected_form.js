@@ -21,7 +21,7 @@
   }
 
   //Form Submit
-  function sendProtectedForm() {
+  function sendProtectedForm(event) {
     // looking for closest .js-protected-form block
     var container = this;
     do {
@@ -40,6 +40,10 @@
 
     // and than trigger submit for this form
     form.dispatchEvent(submitEvent);
+    if (event) {
+      // Prevent double submit event
+      event.preventDefault();
+    }
     return false;
   }
 
