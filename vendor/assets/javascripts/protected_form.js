@@ -2,16 +2,30 @@
 
   var matches;
 
+  //IE polyfill for CustomEvent() constructor
+  //(source: https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent)
+  (function () {
+    if (typeof window.CustomEvent === "function") return false;
+    function CustomEvent(event, params) {
+      params = params || { bubbles: false, cancelable: false, detail: undefined };
+      var evt = document.createEvent('CustomEvent');
+      evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+      return evt;
+    }
+    CustomEvent.prototype = window.Event.prototype;
+    window.CustomEvent = CustomEvent;
+  })();
+
   (function(doc) {
-     matches =
-        doc.matchesSelector ||
-        doc.webkitMatchesSelector ||
-        doc.mozMatchesSelector ||
-        doc.oMatchesSelector ||
-        doc.msMatchesSelector;
+    matches =
+      doc.matchesSelector ||
+      doc.webkitMatchesSelector ||
+      doc.mozMatchesSelector ||
+      doc.oMatchesSelector ||
+      doc.msMatchesSelector;
   })(document.documentElement);
 
-  // simple implementation of $(document).delegate
+  //Simple implementation of $(document).delegate
   function delegate(event, selector, callback) {
     document.addEventListener(event, function(e){
       if (matches.call(e.target, selector)) {
@@ -29,19 +43,21 @@
     }
     while (!container.className.match('js-protected-form'));
     var form = document.getElementById(container.id + '_form').firstChild;
-    var submitEvent = new Event('submit', {
+    var submitEvent = new CustomEvent('submit', {
       'bubbles'    : true,
       'cancelable' : true
     });
 
     // change html structure: return content into form
-    container.parentNode.insertBefore(form, container[0]);
+    container.parentNode.insertBefore(form, container);
     form.firstChild.appendChild(container);
+    // fix for IE when using certain versions of pjax libraries and losing focus
+    document.body.focus();
 
     // and than trigger submit for this form
     form.dispatchEvent(submitEvent);
     if (event) {
-      // Prevent double submit event
+      // prevent double submit event
       event.preventDefault();
     }
     return false;
