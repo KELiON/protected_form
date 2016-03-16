@@ -20,7 +20,7 @@
     });
   }
 
-  //Form Submit
+  // Form Submit
   function sendProtectedForm() {
     // Looking for closest .js-protected-form block
     var container = this;
@@ -32,7 +32,7 @@
 
     // Change html structure: return content into form
     container.parentNode.insertBefore(form, container);
-    form.firstChild.appendChild(container);
+    form.appendChild(container);
 
     // Fix for IE when using certain versions of pjax libraries and losing focus
     document.body.focus();
